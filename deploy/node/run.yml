@@ -1,0 +1,20 @@
+#test
+sudo docker run -it -d \
+--name maze-simple-client \
+--link maze-db \
+--restart=unless-stopped \
+-v /store/data/maze/storage/files:/usr/src/app/storage/files \
+-e NODE_ENV=test \
+-p 3000:3000 \
+maze-simple-client
+
+#iteractive run
+sudo docker run \
+--link maze-db \
+--restart=unless-stopped \
+-v /store/data/maze/storage/files:/usr/src/app/storage/files \
+-e NODE_ENV=test \
+-p 3000:3000 \
+-it \
+--entrypoint /bin/bash \
+maze-simple-client

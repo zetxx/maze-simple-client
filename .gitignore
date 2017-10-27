@@ -1,0 +1,9 @@
+node_modules/**/*
+.history/**/*
+.vscode/**/*
+uploads/**/*
+storage/**/*
+!uploads/.gitkeep
+!storage/files/.gitkeep
+yarn.lock
+package-lock.json
