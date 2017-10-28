@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import Languages from '../../config/languages'
 import PropTypes from 'prop-types'
 // import createClass from 'create-react-class'
 
@@ -10,44 +9,28 @@ class translate extends React.Component {
     this.getTranslation.bind(this)
   }
   getTranslation() {
-    if (!this.props.language) {
-      throw new Error(`no language "${this.props.language}" defined`)
-    } else if (!Languages[this.props.language]) {
-      throw new Error(`no messages defined for language "${this.props.language}"`)
-    } else if (!Languages[this.props.language][this.props.id]) {
-      throw new Error(`no id "${this.props.id}" defined for language "${this.props.language}" messages`)
+    if (this.props.language.current === '') {
+      throw new Error(`no language defined`)
+    } else if (!this.props.language.dictionary[this.props.language.current]) {
+      throw new Error(`no messages defined for language "${this.props.language.current}"`)
+    } else if (!this.props.language.dictionary[this.props.language.current][this.props.children]) {
+      throw new Error(`no label "${this.props.children}" defined for language "${this.props.language.current}" messages`)
     } else {
-      return Languages[this.props.language][this.props.id]
+      return this.props.language.dictionary[this.props.language.current][this.props.children]
     }
   }
   render() {
-    var text = this.getTranslation()
-
     return (
-      <span>{text}</span>
-    )
-  }
-}
-
-class translateHTML extends translate {
-  render() {
-    var text = this.getTranslation()
-
-    return (
-      <span dangerouslySetInnerHTML={{__html: text}} />
+      <span>{this.getTranslation()}</span>
     )
   }
 }
 
 translate.propTypes = {
-  id: PropTypes.string,
-  language: PropTypes.string
+  children: PropTypes.string,
+  language: PropTypes.object
 }
 
 export const Translate = connect(
-  (state) => ({language: state.siteConfig.globalLanguage})
+  (state) => ({language: state.siteConfig.get('language').toJS()})
 )(translate)
-
-export const TranslateHTML = connect(
-  (state) => ({language: state.siteConfig.globalLanguage})
-)(translateHTML)

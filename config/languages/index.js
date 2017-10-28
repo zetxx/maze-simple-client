@@ -1,6 +1,4 @@
-import {en} from './en'
-import {bg} from './bg'
-
-export default {
-  en, bg
+module.exports = {
+  en: require('./en'),
+  bg: require('./bg')
 }
