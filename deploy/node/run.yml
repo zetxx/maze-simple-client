@@ -5,7 +5,7 @@ sudo docker run -it -d \
 --restart=unless-stopped \
 -v /store/data/maze/storage/files:/usr/src/app/storage/files \
 -e NODE_ENV=test \
--p 3000:3000 \
+-p 4000:4000 \
 maze-simple-client
 
 #iteractive run
@@ -14,7 +14,7 @@ sudo docker run \
 --restart=unless-stopped \
 -v /store/data/maze/storage/files:/usr/src/app/storage/files \
 -e NODE_ENV=test \
--p 3000:3000 \
+-p 4000:4000 \
 -it \
 --entrypoint /bin/bash \
 maze-simple-client
