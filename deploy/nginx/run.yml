@@ -1,0 +1,8 @@
+docker run -it -d \
+--name nginx \
+-p 443:443 \
+--restart=unless-stopped \
+--link maze-simple-client \
+-v /home/zetxx/app/nginx/.ssl:/etc/nginx/ssl:ro \
+-v /home/zetxx/app/nginx/.config/nginx:/etc/nginx/conf.d:ro \
+tobi312/rpi-nginx
