@@ -1,8 +1,11 @@
 import {login} from './Login/reducers'
 import {siteConfig} from './Config/reducers'
+import {products} from './Products/reducers'
+
 export default {
   login,
   siteConfig,
+  products,
   prefetchDialog(state = {open: false, count: 0}, action) {
     if (action.preloader === false) {
       return state

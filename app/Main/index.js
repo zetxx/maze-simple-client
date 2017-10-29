@@ -45,7 +45,7 @@ Gate.contextTypes = {
 export default connect(
   (state) => ({
     siteConfig: state.siteConfig,
-    loginToken: !!state.login.get('token').length
+    loginToken: !!state.login.getIn(['loginInfo', 'token'])
   }),
   {fetch}
 )(Gate)

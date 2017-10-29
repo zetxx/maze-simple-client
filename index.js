@@ -62,3 +62,5 @@ server.route([{
 webpackFrontendWatch(server)
 // register dynamic routes
 require('./app/Config/route')(server.route.bind(server))
+require('./app/Login/route')(server.route.bind(server))
+require('./app/Products/route')(server.route.bind(server))

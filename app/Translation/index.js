@@ -34,3 +34,5 @@ translate.propTypes = {
 export const Translate = connect(
   (state) => ({language: state.siteConfig.get('language').toJS()})
 )(translate)
+
+export default Translate

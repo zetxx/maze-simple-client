@@ -6,9 +6,16 @@ export const request = (store) => (next) => (action) => {
     action.status = 'sent'
     var p = new Promise((resolve, reject) => {
       var isUpload = action.httpRequest.method === 'UPLOAD'
+      var loginState = store.getState().login
+      var token = (loginState && loginState.toJS && store.getState('login').login.getIn(['loginInfo', 'token'])) || ''
+      var url = action.httpRequest.url.split('/')
+      if (token && token !== '') {
+        url.push(token)
+      }
+
       var rqPrepare = rq(
         (isUpload ? 'POST' : action.httpRequest.method),
-        action.httpRequest.url
+        url.join('/')
       )
       if (isUpload) {
         (action.httpRequest.filesData || [])
