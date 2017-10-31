@@ -40,7 +40,6 @@ export class Products extends React.Component {
           </TableHead>
           <TableBody>
             {this.props.products.map((v, idx) => {
-              console.log(v)
               return (
                 <TableRow key={idx}>
                   <TableCell>{v.name}</TableCell>
