@@ -15,7 +15,7 @@ var simpleAdd = false
 
 module.exports.priceCalc = (priceRules) => {
   return (p) => {
-    var simpleAddArray = 0
+    var simpleAddSum = 0
 
     return priceRules.reduce((price, priceRule) => {
       if (
@@ -27,12 +27,12 @@ module.exports.priceCalc = (priceRules) => {
         if (!simpleAdd) {
           price = price + priceDiff
         } else {
-          simpleAddArray = simpleAddArray + priceDiff
+          simpleAddSum = simpleAddSum + priceDiff
         }
         return price
       }
 
       return price
-    }, p) + simpleAddArray
+    }, p) + simpleAddSum
   }
 }
