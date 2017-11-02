@@ -58,6 +58,7 @@ function fileCreator(req) {
             })
             .catch(reject)
         } else {
+          console.log('return directly!')
           resolve({contentType: r.contentType, fileName})
         }
       })

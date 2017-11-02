@@ -6,15 +6,24 @@ const quantityType = require('../QuantityType/model')
 const productCategories = require('../ProductCat/model')
 const files = require('../Files/model')
 const users = require('../Users/model')
-const priceRules = require('../PriceRules/model')
-const userPriceRule = require('../UserPriceRule/model')
+const PriceRules = require('../PriceRules/model')
+// const userPriceRule = require('../UserPriceRule/model')
 const backendHelpers = require('../backendHelpers')
+
+const UserPriceRuleGroup = require('../UserPriceRuleGroup/model')
+const PriceRuleGroupBinding = require('../PriceRuleGroupBinding/model')
+const PriceRuleGroup = require('../PriceRuleGroups/model')
 
 product.belongsTo(quantityType, {foreignKey: 'quantityTypeId'})
 product.belongsTo(productCategories, {foreignKey: 'category'})
 product.hasMany(files, {foreignKey: 'itemId'})
-users.belongsToMany(priceRules, {through: userPriceRule})
-priceRules.belongsToMany(users, {through: userPriceRule})
+
+users.belongsToMany(PriceRuleGroup, {through: UserPriceRuleGroup})
+PriceRuleGroup.belongsToMany(users, {through: UserPriceRuleGroup})
+
+PriceRules.belongsToMany(PriceRuleGroup, {through: PriceRuleGroupBinding})
+PriceRuleGroup.belongsToMany(PriceRules, {through: PriceRuleGroupBinding})
+
 // var token____ = '52f9d1362bb6080cd9db1cce60a6c4f3e1c9b47fe2d8ee71695b343ea4785bba'
 
 module.exports = function(registrar) {
@@ -32,7 +41,12 @@ module.exports = function(registrar) {
                 .find({
                   attributes: ['id', 'userName', 'email', 'shopId'],
                   include: [{
-                    model: priceRules
+                    attributes: ['id', 'simpleSum'],
+                    model: PriceRuleGroup,
+                    include: [{
+                      attributes: ['id', 'name', 'rule', 'ruleValueFrom', 'ruleValueTo', 'percentage', 'hardValue'],
+                      model: PriceRules
+                    }]
                   }]
                 }, {where: {id: r.id}})
                 .then((r) => {
@@ -46,7 +60,11 @@ module.exports = function(registrar) {
         }
       }],
       handler: function (req, resp) {
-        var pc = backendHelpers.priceCalc(req.pre.user.priceRules)
+        var priceRules = (req.pre.user.priceRuleGroups || []).reduce((a, c) => {
+          return a.concat(c.priceRules)
+        }, [])
+
+        var pc = backendHelpers.priceCalc(priceRules)
 
         product.findAll({
           attributes: ['id', 'name', 'price'],
