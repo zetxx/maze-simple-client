@@ -27,13 +27,13 @@ export class Products extends React.Component {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell key={1}>
                 <T>Name</T>
               </TableCell>
-              <TableCell>
+              <TableCell key={2}>
                 <T>Price</T>
               </TableCell>
-              <TableCell>
+              <TableCell key={3}>
                 <T>Files</T>
               </TableCell>
             </TableRow>
@@ -42,14 +42,14 @@ export class Products extends React.Component {
             {this.props.products.map((v, idx) => {
               return (
                 <TableRow key={idx}>
-                  <TableCell>{v.name}</TableCell>
-                  <TableCell>{v.price}</TableCell>
-                  <TableCell>
-                    {(v.files || []).map((file) => {
+                  <TableCell key={`1_${idx}`}>{v.name}</TableCell>
+                  <TableCell key={`2_${idx}`}>{v.price}</TableCell>
+                  <TableCell key={`3_${idx}`}>
+                    {(v.files || []).map((file, idx2) => {
                       if (file.contentType.indexOf('image') >= 0) {
-                        return (<a style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><img alt={file.name} src={`/api/files/image/${file.id}/40x40`} /></a>)
+                        return (<a key={idx2} style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><img alt={file.name} src={`/api/files/image/${file.id}/40x40`} /></a>)
                       }
-                      return (<a style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><AttachmentIcon style={{width: '40px', height: '40px'}} /></a>)
+                      return (<a key={idx2} style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><AttachmentIcon style={{width: '40px', height: '40px'}} /></a>)
                     })}
                   </TableCell>
                 </TableRow>

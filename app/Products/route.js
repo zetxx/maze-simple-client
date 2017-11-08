@@ -76,7 +76,8 @@ module.exports = function(registrar) {
             model: files,
             required: false,
             where: {itemType: 'product'}
-          }]
+          }],
+          where: {enabled: 1}
         })
           .then((r) => (r.map((item) => {
             return Object.assign(item, {price: pc(item.price)})
