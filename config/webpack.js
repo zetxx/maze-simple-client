@@ -122,7 +122,8 @@ module.exports = {
           'process.env': {
             'NODE_ENV': JSON.stringify('production')
           }
-        })
+        }),
+        new Webpack.optimize.UglifyJsPlugin()
       ]
     }
     return new Webpack(wpconf, (err, stat) => {

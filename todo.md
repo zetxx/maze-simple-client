@@ -1,0 +1,3 @@
+- export to csv
+- color / themes
+- search

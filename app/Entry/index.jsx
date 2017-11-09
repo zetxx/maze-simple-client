@@ -11,8 +11,10 @@ import Products from '../Products'
 export class Entry extends React.Component {
   render() {
     var page = null
+    var title = ''
     switch (this.props.page) {
       case 'products':
+        title = 'Products'
         page = (<Products />)
         break
     }
@@ -21,7 +23,7 @@ export class Entry extends React.Component {
         <AppBar>
           <Toolbar>
             <Typography type='title' color='inherit'>
-              <T>Results Bellow</T>
+              <T>{title}</T>
             </Typography>
           </Toolbar>
         </AppBar><br />

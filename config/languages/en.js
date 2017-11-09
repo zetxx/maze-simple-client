@@ -3,6 +3,7 @@ module.exports = {
   'Working': 'Working',
   'OK': 'OK',
   'Files': 'Files',
+  'Products': 'Products',
   'Name': 'Name',
   'Price': 'Price',
   'Results Bellow': 'Results Bellow',

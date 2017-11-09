@@ -1,14 +1,23 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import {MuiThemeProvider, createMuiTheme} from 'material-ui/styles'
 import PrefetchDialog from './PrefetchDialog.js'
 import ErrorDialog from './ErrorDialog.js'
 import {Entry} from '../Entry'
 import PropTypes from 'prop-types'
 import {setToken, checkToken} from '../Login/actions'
 import {fetch as fetchSiteConfig} from '../Config/actions'
+import {red} from 'material-ui/colors'
 
-const theme = createMuiTheme()
+const theme = createMuiTheme({
+  overrides: {
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: red['A100']
+      }
+    }
+  }
+})
 
 class Gate extends React.Component {
   componentWillMount() {
