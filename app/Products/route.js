@@ -1,28 +1,15 @@
 const Joi = require('joi')
-const session = require('../session')
-const Boom = require('boom')
+const preHandlers = require('../preHandlers')
 const product = require('./model.js')
 const quantityType = require('../QuantityType/model')
 const productCategories = require('../ProductCat/model')
 const files = require('../Files/model')
-const users = require('../Users/model')
-const PriceRules = require('../PriceRules/model')
 // const userPriceRule = require('../UserPriceRule/model')
 const backendHelpers = require('../backendHelpers')
-
-const UserPriceRuleGroup = require('../UserPriceRuleGroup/model')
-const PriceRuleGroupBinding = require('../PriceRuleGroupBinding/model')
-const PriceRuleGroup = require('../PriceRuleGroups/model')
 
 product.belongsTo(quantityType, {foreignKey: 'quantityTypeId'})
 product.belongsTo(productCategories, {foreignKey: 'category'})
 product.hasMany(files, {foreignKey: 'itemId'})
-
-users.belongsToMany(PriceRuleGroup, {through: UserPriceRuleGroup})
-PriceRuleGroup.belongsToMany(users, {through: UserPriceRuleGroup})
-
-PriceRules.belongsToMany(PriceRuleGroup, {through: PriceRuleGroupBinding})
-PriceRuleGroup.belongsToMany(PriceRules, {through: PriceRuleGroupBinding})
 
 // var token____ = '52f9d1362bb6080cd9db1cce60a6c4f3e1c9b47fe2d8ee71695b343ea4785bba'
 
@@ -33,31 +20,7 @@ module.exports = function(registrar) {
     config: {
       pre: [{
         assign: 'user',
-        method: (request, reply) => {
-          session
-            .check(request.params.token)
-            .then((r) => {
-              return users
-                .find({
-                  attributes: ['id', 'userName', 'email', 'shopId'],
-                  include: [{
-                    attributes: ['id', 'simpleSum'],
-                    model: PriceRuleGroup,
-                    include: [{
-                      attributes: ['id', 'name', 'rule', 'ruleValueFrom', 'ruleValueTo', 'percentage', 'hardValue'],
-                      model: PriceRules
-                    }]
-                  }]
-                }, {where: {id: r.id}})
-                .then((r) => {
-                  return r.toJSON()
-                })
-            })
-            .then(reply)
-            .catch(() => {
-              return reply(Boom.unauthorized('invalid session'))
-            })
-        }
+        method: preHandlers.tokenCheck
       }],
       handler: function (req, resp) {
         var priceRules = (req.pre.user.priceRuleGroups || []).reduce((a, c) => {

@@ -7,7 +7,7 @@ export const request = (store) => (next) => (action) => {
     var p = new Promise((resolve, reject) => {
       var isUpload = action.httpRequest.method === 'UPLOAD'
       var loginState = store.getState().login
-      var token = (loginState && loginState.toJS && store.getState('login').login.getIn(['loginInfo', 'token'])) || ''
+      var token = (loginState && loginState.toJS && store.getState('login').login.get('token')) || ''
       var url = action.httpRequest.url.split('/')
       if (token && token !== '') {
         url.push(token)

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 // import {connect} from 'react-redux'
 // import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
@@ -9,6 +10,12 @@ import Products from '../Products'
 
 export class Entry extends React.Component {
   render() {
+    var page = null
+    switch (this.props.page) {
+      case 'products':
+        page = (<Products />)
+        break
+    }
     return (
       <div>
         <AppBar>
@@ -18,8 +25,12 @@ export class Entry extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar><br />
-        <Products />
+        {page}
       </div>
     )
   }
+}
+
+Entry.propTypes = {
+  page: PropTypes.string
 }
