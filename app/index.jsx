@@ -9,6 +9,7 @@ import reducers from './reducers'
 import {request} from './middleware'
 import Login from './Login'
 import Main from './Main'
+import {ThemeProvider} from './Theme'
 
 injectTapEventPlugin()
 
@@ -25,12 +26,14 @@ const store = createStore(
 const history = syncHistoryWithStore(hashHistory, store)
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <Route path='/login' component={Login} />
-      <Route path='/:token/:page' component={Main} />
-      <Redirect from='/' to='/login' />
-    </Router>
-  </Provider>,
+  <ThemeProvider>
+    <Provider store={store}>
+      <Router history={history}>
+        <Route path='/login' component={Login} />
+        <Route path='/:token/:page' component={Main} />
+        <Redirect from='/' to='/login' />
+      </Router>
+    </Provider>
+  </ThemeProvider>,
   document.getElementById('root')
 )
