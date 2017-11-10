@@ -5,7 +5,7 @@ export const actionList = {
 export const fetch = (category) => ({
   type: actionList.FETCH,
   httpRequest: {
-    method: 'POST',
+    method: 'GET',
     url: '/api/products',
     body: {},
     json: true
