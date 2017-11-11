@@ -1,5 +1,6 @@
 export const actionList = {
-  'FETCH': Symbol('FETCH')
+  'FETCH': Symbol('FETCH'),
+  'SET_SEARCH': Symbol('SET_SEARCH')
 }
 
 export const fetch = (category) => ({
@@ -10,4 +11,9 @@ export const fetch = (category) => ({
     body: {},
     json: true
   }
+})
+
+export const setSearchWord = (word) => ({
+  type: actionList.SET_SEARCH,
+  word
 })
