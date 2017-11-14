@@ -47,7 +47,15 @@ module.exports = {
             },
             { test: /\.json$/, use: {loader: 'json'} },
             { test: /\.css$/, use: {loader: 'style-loader!css-loader'} },
-            { test: /\.png$/, use: {loader: 'url-loader?limit=100000&mimetype=image/png'} }
+            {
+              test: /.*\.(gif|png|jpe?g|svg|ico)$/i,
+              use: [{
+                loader: 'url-loader',
+                options: {
+                  limit: 30720000
+                }
+              }]
+            }
           ]
         },
         plugins: [
@@ -110,11 +118,19 @@ module.exports = {
               }
             }
           },
-          { test: /\.json$/, use: {loader: 'json'} },
-          { test: /\.css$/, use: {loader: 'style-loader!css-loader'} },
+          {test: /\.json$/, use: {loader: 'json'}},
+          {test: /\.css$/, use: {loader: 'style-loader!css-loader'}},
           {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: {loader: 'url-loader?limit=10000&minetype=application/font-woff'}},
           {test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: {loader: 'file-loader'}},
-          {test: /.*\.(gif|png|jpe?g|svg)$/i, use: {loader: 'url-loader?limit=30720000'}}
+          {
+            test: /.*\.(gif|png|jpe?g|svg|ico)$/i,
+            use: [{
+              loader: 'url-loader',
+              options: {
+                limit: 30720000
+              }
+            }]
+          }
         ]
       },
       plugins: [

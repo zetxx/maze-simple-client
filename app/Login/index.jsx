@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
 import {login, inputChange, cleanup} from './actions'
 import {fetch} from '../Config/actions'
+import logoBig from '../static/images/logo-big.jpg'
 
 export class Login extends React.Component {
   constructor(props) {
@@ -44,31 +45,34 @@ export class Login extends React.Component {
       return null
     }
     return (
-      <Paper elevation={4} style={{width: '600px', margin: '20% auto 0 auto', padding: '10px'}}>
-        <Typography type='headline' component='h3'>
-          <Translate>Login</Translate>
-        </Typography>
-        <div>
-          <TextField
-            onChange={this.handleChange('username')}
-            label='User Name'
-            type='text'
-            margin='normal'
-            value={this.props.username}
-          />&nbsp;
-          <TextField
-            onChange={this.handleChange('password')}
-            label='Password'
-            type='password'
-            autoComplete='current-password'
-            margin='normal'
-            value={this.props.password}
-          />&nbsp;&nbsp;&nbsp;
-          <Button disabled={!this.canLogin()} raised color='primary' onTouchTap={this.handleLogin}>
+      <div>
+        <Paper elevation={4} style={{width: '600px', margin: '20% auto 0 auto', padding: '10px'}}>
+          <Typography type='headline' component='h3'>
             <Translate>Login</Translate>
-          </Button>
-        </div>
-      </Paper>
+          </Typography>
+          <div>
+            <TextField
+              onChange={this.handleChange('username')}
+              label='User Name'
+              type='text'
+              margin='normal'
+              value={this.props.username}
+            />&nbsp;
+            <TextField
+              onChange={this.handleChange('password')}
+              label='Password'
+              type='password'
+              autoComplete='current-password'
+              margin='normal'
+              value={this.props.password}
+            />&nbsp;&nbsp;&nbsp;
+            <Button disabled={!this.canLogin()} raised color='primary' onTouchTap={this.handleLogin}>
+              <Translate>Login</Translate>
+            </Button>
+          </div>
+        </Paper>
+        <img src={logoBig} alt='logo' style={{width: '400px', margin: '10px auto', display: 'block'}} />
+      </div>
     )
   }
 }

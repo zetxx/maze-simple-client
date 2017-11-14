@@ -12,7 +12,6 @@ import Paper from 'material-ui/Paper'
 import {fetch, setSearchWord} from './actions'
 import Toolbar from 'material-ui/Toolbar'
 import TextField from 'material-ui/TextField'
-import Button from 'material-ui/Button'
 import Grid from 'material-ui/Grid'
 import T from '../Translation'
 
