@@ -29,8 +29,9 @@ const handler = (req, resp) => {
     }, {
       model: files,
       required: false,
-      where: {itemType: 'product'}
+      where: {itemType: 'product'},
     }],
+    order: [[{model: productCategories}, 'name', 'ASC'], ['name', 'ASC']],
     where: {enabled: 1}
   })
     .then((r) => (r.map((item) => {

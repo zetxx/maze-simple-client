@@ -36,8 +36,5 @@ module.exports = {
         return price
       }, p) + simpleAddSum
     }
-  },
-  zzz: function(a) {
-    console.log(a)
   }
 }

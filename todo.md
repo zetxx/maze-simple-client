@@ -1,3 +1,4 @@
-- export to csv
-- color / themes
-- search
+category filter
+add basket
+
+currency

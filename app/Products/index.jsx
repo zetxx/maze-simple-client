@@ -32,7 +32,6 @@ export class Products extends React.Component {
     this.props.setSearchWord(e.target.value)
   }
   render() {
-    console.log(this.props.searchWord)
     return (
       <Paper elevation={4} style={{padding: '15px', margin: '50px 0 0 0'}}>
         <Toolbar>
@@ -48,10 +47,16 @@ export class Products extends React.Component {
                 <T>Name</T>
               </TableCell>
               <TableCell key={2}>
-                <T>Price</T>
+                <T>Category</T>
               </TableCell>
               <TableCell key={3}>
+                <T>Price lv./without vat</T>
+              </TableCell>
+              <TableCell key={4}>
                 <T>Files</T>
+              </TableCell>
+              <TableCell key={5} style={{width: '20px'}}>
+                <T>Add To Basket</T>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -59,14 +64,15 @@ export class Products extends React.Component {
             {this.props.products
               .filter((v) => {
                 return this.props.searchWord === '' ||
-                (v.name.indexOf(this.props.searchWord) >= 0)
+                (v.name.toLowerCase().indexOf(this.props.searchWord.toLowerCase()) >= 0)
               })
               .map((v, idx) => {
                 return (
                   <TableRow key={idx}>
                     <TableCell key={`1_${idx}`}>{v.name}</TableCell>
-                    <TableCell key={`2_${idx}`}>{v.price}</TableCell>
-                    <TableCell key={`3_${idx}`}>
+                    <TableCell key={`2_${idx}`}>{v.productCategory.name}</TableCell>
+                    <TableCell key={`3_${idx}`}>{v.price}</TableCell>
+                    <TableCell key={`4_${idx}`}>
                       {(v.files || []).map((file, idx2) => {
                         if (file.contentType.indexOf('image') >= 0) {
                           return (<a key={idx2} style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><img alt={file.name} src={`/api/files/image/${file.id}/40x40`} /></a>)
@@ -74,6 +80,7 @@ export class Products extends React.Component {
                         return (<a key={idx2} style={fileStyles} target='_blank' href={`/api/files/${file.id}`} title={file.name}><AttachmentIcon style={{width: '40px', height: '40px'}} /></a>)
                       })}
                     </TableCell>
+                    <TableCell key={`5_${idx}`}>-</TableCell>
                   </TableRow>
                 )
               })}
