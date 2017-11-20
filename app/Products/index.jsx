@@ -64,7 +64,8 @@ export class Products extends React.Component {
             {this.props.products
               .filter((v) => {
                 return this.props.searchWord === '' ||
-                (v.name.toLowerCase().indexOf(this.props.searchWord.toLowerCase()) >= 0)
+                (v.name.toLowerCase().indexOf(this.props.searchWord.toLowerCase()) >= 0) ||
+                (v.articleNum.toLowerCase().indexOf(this.props.searchWord.toLowerCase()) >= 0)
               })
               .map((v, idx) => {
                 return (

@@ -15,6 +15,10 @@ const products = db.define('products', {
     type: Sequelize.INTEGER,
     allowNull: true
   },
+  articleNum: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   category: {
     type: Sequelize.INTEGER,
     references: {

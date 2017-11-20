@@ -21,7 +21,7 @@ const handler = (req, resp) => {
   var pc = backendHelpers.priceCalc(priceRules)
 
   product.findAll({
-    attributes: ['id', 'name', 'price'],
+    attributes: ['id', 'name', 'price', 'articleNum'],
     include: [{
       model: quantityType
     }, {
@@ -29,7 +29,7 @@ const handler = (req, resp) => {
     }, {
       model: files,
       required: false,
-      where: {itemType: 'product'},
+      where: {itemType: 'product'}
     }],
     order: [[{model: productCategories}, 'name', 'ASC'], ['name', 'ASC']],
     where: {enabled: 1}
