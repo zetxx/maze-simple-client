@@ -11,6 +11,10 @@ const users = db.define('users', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  currency: {
+    type: Sequelize.ENUM('USD', 'EUR', 'JPY', 'GBP', 'RUB'),
+    allowNull: true
+  },
   email: {
     type: Sequelize.STRING,
     allowNull: false
