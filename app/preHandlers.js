@@ -19,7 +19,7 @@ module.exports = {
       .then((r) => {
         return users
           .find({
-            attributes: ['id', 'userName', 'email', 'shopId'],
+            attributes: ['id', 'userName', 'email', 'shopId', 'currency'],
             include: [{
               attributes: ['id', 'simpleSum'],
               model: PriceRuleGroup,
