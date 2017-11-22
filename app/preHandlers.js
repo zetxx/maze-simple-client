@@ -5,9 +5,12 @@ const UserPriceRuleGroup = require('./UserPriceRuleGroup/model')
 const PriceRuleGroupBinding = require('./PriceRuleGroupBinding/model')
 const PriceRuleGroup = require('./PriceRuleGroups/model')
 const PriceRules = require('./PriceRules/model')
+const CurrencyRates = require('./CurrencyRates/model')
 
 users.belongsToMany(PriceRuleGroup, {through: UserPriceRuleGroup})
 PriceRuleGroup.belongsToMany(users, {through: UserPriceRuleGroup})
+
+users.belongsTo(CurrencyRates, {foreignKey: 'currency', targetKey: 'currency'})
 
 PriceRules.belongsToMany(PriceRuleGroup, {through: PriceRuleGroupBinding})
 PriceRuleGroup.belongsToMany(PriceRules, {through: PriceRuleGroupBinding})
@@ -21,6 +24,9 @@ module.exports = {
           .find({
             attributes: ['id', 'userName', 'email', 'shopId', 'currency'],
             include: [{
+              attributes: ['rate'],
+              model: CurrencyRates
+            }, {
               attributes: ['id', 'simpleSum'],
               model: PriceRuleGroup,
               include: [{
@@ -34,7 +40,8 @@ module.exports = {
           })
       })
       .then(reply)
-      .catch(() => {
+      .catch((e) => {
+        console.error(e)
         return reply(Boom.unauthorized('invalid session'))
       })
   }

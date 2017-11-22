@@ -50,7 +50,15 @@ export class Products extends React.Component {
                 <T>Category</T>
               </TableCell>
               <TableCell key={3}>
-                <T>Price lv./without vat</T>
+                {{
+                  '': (''),
+                  'EUR': (<T>Price EUR/without vat</T>),
+                  'BGN': (<T>Price BGN/without vat</T>),
+                  'USD': (<T>Price USD/without vat</T>),
+                  'JPY': (<T>Price JPY/without vat</T>),
+                  'GBP': (<T>Price GBP/without vat</T>),
+                  'RUB': (<T>Price RUB/without vat</T>)
+                }[this.props.currency]}
               </TableCell>
               <TableCell key={4}>
                 <T>Files</T>
@@ -95,16 +103,21 @@ export class Products extends React.Component {
 Products.propTypes = {
   fetch: PropTypes.func,
   token: PropTypes.string,
+  currency: PropTypes.string,
   searchWord: PropTypes.string,
   setSearchWord: PropTypes.func,
   products: PropTypes.array
 }
 
 export default connect(
-  (state) => ({
-    products: state.products.get('data').toJS(),
-    searchWord: state.products.get('searchWord'),
-    token: state.login.get('token')
-  }),
+  (state) => {
+    console.log(state.products.getIn(['currencyRate', 'currency']))
+    return {
+      products: state.products.get('data').toJS(),
+      currency: state.products.getIn(['currencyRate', 'currency']) || '',
+      searchWord: state.products.get('searchWord'),
+      token: state.login.get('token')
+    }
+  },
   {fetch, setSearchWord}
 )(Products)

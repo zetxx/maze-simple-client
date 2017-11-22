@@ -4,7 +4,6 @@ const product = require('./model.js')
 const quantityType = require('../QuantityType/model')
 const productCategories = require('../ProductCat/model')
 const files = require('../Files/model')
-// const userPriceRule = require('../UserPriceRule/model')
 const backendHelpers = require('../backendHelpers')
 
 product.belongsTo(quantityType, {foreignKey: 'quantityTypeId'})
@@ -17,6 +16,7 @@ const handler = (req, resp) => {
   var priceRules = (req.pre.user.priceRuleGroups || []).reduce((a, c) => {
     return a.concat(c.priceRules)
   }, [])
+  var currencyRate = {rate: req.pre.user.currencyRate.rate, currency: req.pre.user.currency}
 
   var pc = backendHelpers.priceCalc(priceRules)
 
@@ -35,7 +35,7 @@ const handler = (req, resp) => {
     where: {enabled: 1}
   })
     .then((r) => (r.map((item) => {
-      return Object.assign(item, {price: pc(item.price)})
+      return Object.assign(item, {price: pc(item.price) * currencyRate.rate})
     })))
     .then((r) => {
       if (req.params && req.params.export) {
@@ -58,7 +58,7 @@ const handler = (req, resp) => {
           .header('content-type', 'application/octet-stream')
           .header('Content-Disposition', 'attachment; filename="products.csv"')
       }
-      resp(r)
+      resp({products: r, currencyRate})
     })
     .catch((e) => {
       console.error(e)
