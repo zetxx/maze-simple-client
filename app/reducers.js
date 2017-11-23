@@ -1,11 +1,13 @@
 import {login} from './Login/reducers'
 import {siteConfig} from './Config/reducers'
 import {products} from './Products/reducers'
+import {basket} from './Basket/reducers'
 
 export default {
   login,
   siteConfig,
   products,
+  basket,
   prefetchDialog(state = {open: false, count: 0}, action) {
     if (action.preloader === false) {
       return state

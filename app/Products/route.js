@@ -58,8 +58,16 @@ const handler = (req, resp) => {
           .header('content-type', 'application/octet-stream')
           .header('Content-Disposition', 'attachment; filename="products.csv"')
       }
-      resp({products: r, currencyRate})
+      return {products: r, currencyRate}
     })
+    .then((r) => {
+      return productCategories
+        .findAll({where: {enabled: 1}})
+        .then((pc) => {
+          return Object.assign(r, {productCategories: pc.map((p) => (p.dataValues))})
+        })
+    })
+    .then(resp)
     .catch((e) => {
       console.error(e)
       resp(e)
