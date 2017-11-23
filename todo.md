@@ -1,4 +1,2 @@
-category filter
-add basket
-
-currency
+* category filter
+* add basket
