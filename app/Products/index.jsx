@@ -95,7 +95,7 @@ export class Products extends React.Component {
                 <T>Files</T>
               </TableCell>
               <TableCell key={5} style={{width: '20px'}}>
-                <T>Add To Basket</T>
+                <T>Basket Add/Remove</T>
               </TableCell>
             </TableRow>
           </TableHead>

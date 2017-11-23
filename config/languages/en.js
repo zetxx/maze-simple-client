@@ -5,7 +5,7 @@ module.exports = {
   'Export': 'Export',
   'Clear all': 'Clear all',
   'Search word': 'Search word',
-  'Add To Basket': 'Add To Basket',
+  'Basket Add/Remove': 'Basket Add/Remove',
   'Category': 'Category',
   'Price /without vat': 'Price /without vat',
   'Price BGN/without vat': 'Price BGN/without vat',
