@@ -24,6 +24,9 @@ const store = createStore(
   )
 )
 const history = syncHistoryWithStore(hashHistory, store)
+store.subscribe(() => {
+  window.localStorage.setItem('reduxState.basket', JSON.stringify(store.getState().basket.toJS()))
+})
 
 ReactDOM.render(
   <ThemeProvider>

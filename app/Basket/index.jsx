@@ -11,9 +11,10 @@ export class Basket extends React.Component {
   //   super(p)
   // }
   render() {
+    let href = this.props.basketSelected ? `#/${this.props.token}/products` : `#/${this.props.token}/basket`
     return (
-      <Button fab color='primary' href='/abc' >
-        <Badge badgeContent={this.props.basketSize} color='accent' href='/abc' >
+      <Button fab color='primary' href={href}>
+        <Badge badgeContent={this.props.basketSize} color='accent'>
           <ShoppingCart />
         </Badge>
       </Button>
@@ -22,13 +23,16 @@ export class Basket extends React.Component {
 }
 
 Basket.propTypes = {
-  basketSize: PropTypes.number
+  basketSize: PropTypes.number,
+  token: PropTypes.string,
+  basketSelected: PropTypes.bool
 }
 
 export default connect(
   (state) => {
     return {
-      basketSize: state.basket.get('items').size
+      basketSize: state.basket.get('items').size,
+      token: state.login.getIn(['token'])
     }
   },
   {}

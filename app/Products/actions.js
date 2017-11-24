@@ -4,12 +4,12 @@ export const actionList = {
   'SET_SEARCH_CAT': Symbol('SET_SEARCH_CAT')
 }
 
-export const fetch = (category) => ({
+export const fetch = (products) => ({
   type: actionList.FETCH,
   httpRequest: {
-    method: 'GET',
+    method: (products ? 'POST' : 'GET'),
     url: '/api/products',
-    body: {},
+    body: (products ? {products} : {}),
     json: true
   }
 })

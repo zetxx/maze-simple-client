@@ -21,6 +21,11 @@ export class Entry extends React.Component {
         page = (<Products />)
         appBarRight = (<Basket />)
         break
+      case 'basket':
+        title = 'Basket'
+        page = (<Products basketSelected />)
+        appBarRight = (<Basket basketSelected />)
+        break
     }
     return (
       <div>

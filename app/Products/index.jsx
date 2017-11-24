@@ -26,9 +26,18 @@ export class Products extends React.Component {
     super(p)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleCategorySearch = this.handleCategorySearch.bind(this)
+    this.handlePrepareExportAndDo = this.handlePrepareExportAndDo.bind(this)
   }
   componentWillMount() {
-    this.props.fetch()
+    this.props.fetch(this.props.basketSelected ? this.props.basketItems : undefined)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.basketSelected !== nextProps.basketSelected) {
+      this.props.fetch(nextProps.basketSelected ? nextProps.basketItems : undefined)
+    }
+    if (this.props.basketSelected && nextProps.basketItems.length !== this.props.basketItems.length) {
+      this.props.fetch(nextProps.basketItems)
+    }
   }
   handleSearch (e) {
     this.props.setSearchWord(e.target.value)
@@ -40,6 +49,19 @@ export class Products extends React.Component {
     return () => {
       this.props.toBasket(id)
     }
+  }
+  handlePrepareExportAndDo() {
+    //TODO prepare export and export it of is basket selected
+  }
+  getExport() {
+    if (!this.props.basketSelected) {
+      return (<Button raised href={`/api/products/export/${this.props.token}`} style={{textAlign: 'right'}} color='primary'>
+        <T>Export</T>
+      </Button>)
+    }
+    return (<Button raised onClick={this.handlePrepareExportAndDo} style={{textAlign: 'right'}} color='primary'>
+      <T>Export</T>
+    </Button>)
   }
   render() {
     return (
@@ -67,9 +89,7 @@ export class Products extends React.Component {
               </Select>
             </FormControl>
           </Grid>
-          <Button raised href={`/api/products/export/${this.props.token}`} style={{textAlign: 'right'}} color='primary'>
-            <T>Export</T>
-          </Button>
+          {this.getExport()}
         </Toolbar>
         <Table>
           <TableHead>
@@ -145,7 +165,9 @@ Products.propTypes = {
   toBasket: PropTypes.func,
   setSearchWord: PropTypes.func,
   productCategories: PropTypes.array,
-  products: PropTypes.array
+  products: PropTypes.array,
+  basketItems: PropTypes.array,
+  basketSelected: PropTypes.bool
 }
 
 export default connect(
@@ -156,7 +178,8 @@ export default connect(
       currency: state.products.getIn(['currencyRate', 'currency']) || '',
       searchWord: state.products.get('searchWord'),
       searchCategory: state.products.get('searchCategory').toJS(),
-      token: state.login.get('token')
+      token: state.login.get('token'),
+      basketItems: state.basket.getIn(['items']).toJS()
     }
   },
   {fetch, setSearchWord, setSearchCategory, toBasket}

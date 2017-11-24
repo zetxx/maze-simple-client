@@ -19,6 +19,10 @@ const handler = (req, resp) => {
   var currencyRate = {rate: req.pre.user.currencyRate.rate, currency: req.pre.user.currency}
 
   var pc = backendHelpers.priceCalc(priceRules)
+  var productWhere = {enabled: 1}
+  if (req.payload && req.payload.products) {
+    productWhere.id = {in: req.payload.products}
+  }
 
   product.findAll({
     attributes: ['id', 'name', 'price', 'articleNum'],
@@ -32,7 +36,7 @@ const handler = (req, resp) => {
       where: {itemType: 'product'}
     }],
     order: [[{model: productCategories}, 'name', 'ASC'], ['name', 'ASC']],
-    where: {enabled: 1}
+    where: productWhere
   })
     .then((r) => (r.map((item) => {
       return Object.assign(item, {price: pc(item.price) * currencyRate.rate})
@@ -111,6 +115,29 @@ module.exports = function(registrar) {
         params: {
           token: Joi.string().min(10).required().description('crypto token'),
           export: Joi.string().description('export result set')
+        }
+      }
+    }
+  })
+
+  registrar({
+    method: 'POST',
+    path: '/api/products/{token}',
+    config: {
+      pre: [{
+        assign: 'user',
+        method: preHandlers.tokenCheck
+      }],
+      handler,
+      description: 'Product basket list',
+      notes: 'Product basket list',
+      tags: ['api', 'product', 'basket', 'list'],
+      validate: {
+        payload: {
+          products: Joi.array().items(Joi.number()).required().description('product list')
+        },
+        params: {
+          token: Joi.string().min(10).required().description('crypto token')
         }
       }
     }

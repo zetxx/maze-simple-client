@@ -2,6 +2,7 @@ module.exports = {
   'Login': 'Login',
   'Working': 'Working',
   'OK': 'OK',
+  'Basket': 'Basket',
   'Export': 'Export',
   'Clear all': 'Clear all',
   'Search word': 'Search word',
