@@ -51,7 +51,7 @@ export class Products extends React.Component {
     }
   }
   handlePrepareExportAndDo() {
-    //TODO prepare export and export it of is basket selected
+    // TODO prepare export and export it of is basket selected
   }
   getExport() {
     if (!this.props.basketSelected) {
