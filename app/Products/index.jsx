@@ -10,7 +10,7 @@ import {FormControl} from 'material-ui/Form'
 import AttachmentIcon from 'material-ui-icons/Attachment'
 import Paper from 'material-ui/Paper'
 import {fetch, setSearchWord, setSearchCategory} from './actions'
-import {change as toBasket} from '../Basket/actions'
+import {change as toBasket, exportPrepare as exportBasketPrepare} from '../Basket/actions'
 import Toolbar from 'material-ui/Toolbar'
 import ShoppingCart from 'material-ui-icons/ShoppingCart'
 import Grid from 'material-ui/Grid'
@@ -38,6 +38,9 @@ export class Products extends React.Component {
     if (this.props.basketSelected && nextProps.basketItems.length !== this.props.basketItems.length) {
       this.props.fetch(nextProps.basketItems)
     }
+    if (nextProps.basketExportId !== this.props.basketExportId) {
+      window.location = (`/api/products/basket/${nextProps.basketExportId}/${nextProps.token}`)
+    }
   }
   handleSearch (e) {
     this.props.setSearchWord(e.target.value)
@@ -51,7 +54,7 @@ export class Products extends React.Component {
     }
   }
   handlePrepareExportAndDo() {
-    // TODO prepare export and export it of is basket selected
+    this.props.exportBasketPrepare(this.props.basketItems)
   }
   getExport() {
     if (!this.props.basketSelected) {
@@ -157,17 +160,23 @@ export class Products extends React.Component {
 
 Products.propTypes = {
   fetch: PropTypes.func,
+  basketExportId: PropTypes.number,
   token: PropTypes.string,
   currency: PropTypes.string,
   searchWord: PropTypes.string,
   searchCategory: PropTypes.array,
   setSearchCategory: PropTypes.func,
   toBasket: PropTypes.func,
+  exportBasketPrepare: PropTypes.func,
   setSearchWord: PropTypes.func,
   productCategories: PropTypes.array,
   products: PropTypes.array,
   basketItems: PropTypes.array,
   basketSelected: PropTypes.bool
+}
+
+Products.contextTypes = {
+  router: PropTypes.object
 }
 
 export default connect(
@@ -179,8 +188,9 @@ export default connect(
       searchWord: state.products.get('searchWord'),
       searchCategory: state.products.get('searchCategory').toJS(),
       token: state.login.get('token'),
-      basketItems: state.basket.getIn(['items']).toJS()
+      basketItems: state.basket.getIn(['items']).toJS(),
+      basketExportId: state.basket.getIn(['exportPrepareId'])
     }
   },
-  {fetch, setSearchWord, setSearchCategory, toBasket}
+  {fetch, setSearchWord, setSearchCategory, toBasket, exportBasketPrepare}
 )(Products)

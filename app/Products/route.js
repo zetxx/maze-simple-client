@@ -12,6 +12,8 @@ product.hasMany(files, {foreignKey: 'itemId'})
 
 // var token____ = '52f9d1362bb6080cd9db1cce60a6c4f3e1c9b47fe2d8ee71695b343ea4785bba'
 
+var basketExportList = []
+
 const handler = (req, resp) => {
   var priceRules = (req.pre.user.priceRuleGroups || []).reduce((a, c) => {
     return a.concat(c.priceRules)
@@ -58,20 +60,23 @@ const handler = (req, resp) => {
           })
           result = result.concat([columns.join(';')]).concat(dataCloumns)
         }
-        return resp(result.join('\n'))
+        resp(result.join('\n'))
           .header('content-type', 'application/octet-stream')
           .header('Content-Disposition', 'attachment; filename="products.csv"')
+        return false
       }
       return {products: r, currencyRate}
     })
     .then((r) => {
-      return productCategories
-        .findAll({where: {enabled: 1}})
-        .then((pc) => {
-          return Object.assign(r, {productCategories: pc.map((p) => (p.dataValues))})
-        })
+      if (r) {
+        return productCategories
+          .findAll({where: {enabled: 1}})
+          .then((pc) => {
+            return Object.assign(r, {productCategories: pc.map((p) => (p.dataValues))})
+          })
+          .then(resp)
+      }
     })
-    .then(resp)
     .catch((e) => {
       console.error(e)
       resp(e)
@@ -138,6 +143,64 @@ module.exports = function(registrar) {
         },
         params: {
           token: Joi.string().min(10).required().description('crypto token')
+        }
+      }
+    }
+  })
+  function removeBasketExport (basketId) {
+    return basketExportList
+      .slice(0, basketId)
+      .concat(basketExportList.slice(basketId + 1, basketExportList.length))
+  }
+  registrar({
+    method: 'POST',
+    path: '/api/products/basket/export/prepare/{token}',
+    config: {
+      pre: [{
+        assign: 'user',
+        method: preHandlers.tokenCheck
+      }],
+      handler: (req, resp) => {
+        var basketId = basketExportList.push(req.payload && req.payload.products) - 1
+        setTimeout(() => {
+          basketExportList = removeBasketExport(basketId)
+        }, 1000000)
+        resp(basketId)
+      },
+      description: 'Product basket list',
+      notes: 'Product basket list',
+      tags: ['api', 'product', 'basket', 'list'],
+      validate: {
+        payload: {
+          products: Joi.array().items(Joi.number()).required().description('product list')
+        },
+        params: {
+          token: Joi.string().min(10).required().description('crypto token')
+        }
+      }
+    }
+  })
+
+  registrar({
+    method: 'GET',
+    path: '/api/products/basket/{id}/{token}',
+    config: {
+      pre: [{
+        assign: 'user',
+        method: preHandlers.tokenCheck
+      }],
+      handler: (req, resp) => {
+        req.params.export = true
+        req.payload = {products: basketExportList[req.params.id]}
+        handler(req, resp)
+      },
+      description: 'Product basket export',
+      notes: 'Product basket export',
+      tags: ['api', 'product', 'basket', 'export'],
+      validate: {
+        params: {
+          token: Joi.string().min(10).required().description('crypto token'),
+          id: Joi.number().required().description('export id')
         }
       }
     }
