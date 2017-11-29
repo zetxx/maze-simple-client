@@ -6,7 +6,7 @@ const defBasketState = fromJS({items: [], exportPrepareId: -1})
 
 export const basket = (state = defBasketState, action) => {
   if (action.type === '@@INIT') {
-    state = fromJS(localStorage.getItem('reduxState.basket') ? JSON.parse(localStorage.getItem('reduxState.basket')) : {})
+    state = fromJS(localStorage.getItem('reduxState.basket') ? JSON.parse(localStorage.getItem('reduxState.basket')) : defBasketState.toJS())
       .set('exportPrepareId', -1)
   } else if (action.type === actionList.CHANGE) {
     return state
