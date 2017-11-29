@@ -181,6 +181,7 @@ Products.contextTypes = {
 
 export default connect(
   (state) => {
+    var basketItems = state.basket.getIn(['items'])
     return {
       products: state.products.get('products').toJS(),
       productCategories: state.products.get('productCategories').toJS(),
@@ -188,8 +189,8 @@ export default connect(
       searchWord: state.products.get('searchWord'),
       searchCategory: state.products.get('searchCategory').toJS(),
       token: state.login.get('token'),
-      basketItems: state.basket.getIn(['items']).toJS(),
-      basketExportId: state.basket.getIn(['exportPrepareId'])
+      basketItems: (basketItems && basketItems.toJS()) || [],
+      basketExportId: state.basket.getIn(['exportPrepareId']) || -1
     }
   },
   {fetch, setSearchWord, setSearchCategory, toBasket, exportBasketPrepare}
