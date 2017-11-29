@@ -30,8 +30,9 @@ Basket.propTypes = {
 
 export default connect(
   (state) => {
+    var basketItems = state.basket.get('items')
     return {
-      basketSize: state.basket.get('items').size,
+      basketSize: (basketItems && basketItems.size) || 0,
       token: state.login.getIn(['token'])
     }
   },
