@@ -1,5 +1,5 @@
 import {actionList} from './actions'
-import {fromJS} from 'immutable'
+import {fromJS, List} from 'immutable'
 const localStorage = window.localStorage
 
 const defBasketState = fromJS({items: [], exportPrepareId: -1})
@@ -8,6 +8,7 @@ export const basket = (state = defBasketState, action) => {
   if (action.type === '@@INIT') {
     state = fromJS(localStorage.getItem('reduxState.basket') ? JSON.parse(localStorage.getItem('reduxState.basket')) : defBasketState.toJS())
       .set('exportPrepareId', -1)
+      .update('items', (list) => (list ? list : List()))
   } else if (action.type === actionList.CHANGE) {
     return state
       .update('items', (list) => {
