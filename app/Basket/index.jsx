@@ -13,8 +13,8 @@ export class Basket extends React.Component {
   render() {
     let href = this.props.basketSelected ? `#/${this.props.token}/products` : `#/${this.props.token}/basket`
     return (
-      <Button fab color='primary' href={href}>
-        <Badge badgeContent={this.props.basketSize} color='accent'>
+      <Button variant='fab' color='primary' href={href}>
+        <Badge badgeContent={this.props.basketSize} color='secondary'>
           <ShoppingCart />
         </Badge>
       </Button>

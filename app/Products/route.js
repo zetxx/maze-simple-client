@@ -14,7 +14,7 @@ product.hasMany(files, {foreignKey: 'itemId'})
 
 var basketExportList = []
 
-const handler = (req, resp) => {
+const handler = (req, h) => {
   var priceRules = (req.pre.user.priceRuleGroups || []).reduce((a, c) => {
     return a.concat(c.priceRules)
   }, [])
@@ -26,7 +26,7 @@ const handler = (req, resp) => {
     productWhere.id = {in: req.payload.products}
   }
 
-  product.findAll({
+  return product.findAll({
     attributes: ['id', 'name', 'price', 'articleNum'],
     include: [{
       model: quantityType
@@ -60,10 +60,11 @@ const handler = (req, resp) => {
           })
           result = result.concat([columns.join(';')]).concat(dataCloumns)
         }
-        resp(result.join('\n'))
+        const response = h.response(result.join('\n'));
+        return response
           .header('content-type', 'application/octet-stream')
           .header('Content-Disposition', 'attachment; filename="products.csv"')
-        return false
+        // return result.join('\n')
       }
       return {products: r, currencyRate}
     })
@@ -74,12 +75,11 @@ const handler = (req, resp) => {
           .then((pc) => {
             return Object.assign(r, {productCategories: pc.map((p) => (p.dataValues))})
           })
-          .then(resp)
       }
     })
     .catch((e) => {
       console.error(e)
-      resp(e)
+      throw e
     })
 }
 
@@ -165,7 +165,7 @@ module.exports = function(registrar) {
         setTimeout(() => {
           basketExportList = removeBasketExport(basketId)
         }, 1000000)
-        resp(basketId)
+        return basketId
       },
       description: 'Product basket list',
       notes: 'Product basket list',
@@ -192,7 +192,7 @@ module.exports = function(registrar) {
       handler: (req, resp) => {
         req.params.export = true
         req.payload = {products: basketExportList[req.params.id]}
-        handler(req, resp)
+        return handler(req, resp)
       },
       description: 'Product basket export',
       notes: 'Product basket export',

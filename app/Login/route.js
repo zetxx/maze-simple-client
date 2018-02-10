@@ -12,7 +12,7 @@ module.exports = function(registrar) {
       handler: function (req, resp) {
         const hash = crypto.createHash('sha256')
         hash.update(req.payload.password)
-        users.find({
+        return users.find({
           where: {
             username: req.payload.username,
             password: hash.digest('hex')
@@ -20,13 +20,13 @@ module.exports = function(registrar) {
         })
           .then((user) => {
             if (!user) {
-              return resp(Boom.unauthorized('invalid username/password'))
+              throw Boom.unauthorized('invalid username/password')
             }
             var token = session.register(user.id, user.userName)
-            return resp({
+            return {
               username: user.userName,
               token
-            })
+            }
           })
       },
       description: 'User login',

@@ -8,41 +8,34 @@ const webpackFrontendWatch = require('./config/webpack.js').watch
 
 const Pack = require('./package')
 
-const server = new Hapi.Server({
-  connections: {
-    routes: {
-      files: {
-        relativeTo: Path.join(__dirname, './public')
-      }
+const server = Hapi.Server(Object.assign({
+  routes: {
+    files: {
+      relativeTo: Path.join(__dirname, './public')
     }
   }
-})
-server.connection(config.httpServer)
+}, config.httpServer))
+// server.connection(config.httpServer)
 
-server.register([
-  Inert,
-  Vision, {
-    'register': HapiSwagger,
-    'options': {
-      info: {
-        'title': 'Test API Documentation',
-        'version': Pack.version || '0'
-      }
-    }
-  }],
-(err) => {
-  if (err) {
-    console.error(err)
-  } else {
-    server.start((err) => {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log('Server running at:', server.info.uri)
-      }
-    })
-  }
-})
+const provision = async () => {
+  await server.register([
+    Inert,
+    Vision,
+    {
+        plugin: HapiSwagger,
+        options: {info: {
+          'title': 'Test API Documentation',
+          'version': Pack.version || '0'
+        }}
+    },
+    webpackFrontendWatch()
+  ])
+
+  await server.start()
+  console.log('Server running at:', server.info.uri)
+};
+
+provision()
 
 server.route([{
   method: 'GET',
@@ -59,7 +52,7 @@ server.route([{
   path: '/favicon.ico',
   handler: { file: './assets/favicon.ico' }
 }])
-webpackFrontendWatch(server)
+
 // register dynamic routes
 require('./app/Config/route')(server.route.bind(server))
 require('./app/Login/route')(server.route.bind(server))

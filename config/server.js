@@ -5,7 +5,7 @@ const config = {
     db: 'mysql://db:123@127.0.0.1:3306/maze',
     dbDialect: 'mysql',
     httpServer: {
-      host: '0.0.0.0', port: 3000
+      address: '0.0.0.0', port: 3000
     },
     upload: {
       storeDir: ['storage', 'files']
@@ -16,7 +16,7 @@ const config = {
     db: 'mysql://db:123@maze-db:3306/maze',
     dbDialect: 'mysql',
     httpServer: {
-      host: '0.0.0.0', port: 3000
+      address: '0.0.0.0', port: 3000
     },
     upload: {
       storeDir: ['storage', 'files']
@@ -27,7 +27,7 @@ const config = {
     db: 'mysql://db:123@maze-db:3306/maze',
     dbDialect: 'mysql',
     httpServer: {
-      host: '0.0.0.0', port: 3000
+      address: '0.0.0.0', port: 3000
     },
     upload: {
       storeDir: ['storage', 'files']

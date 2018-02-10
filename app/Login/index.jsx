@@ -66,7 +66,7 @@ export class Login extends React.Component {
               margin='normal'
               value={this.props.password}
             />&nbsp;&nbsp;&nbsp;
-            <Button disabled={!this.canLogin()} raised color='primary' onTouchTap={this.handleLogin}>
+            <Button disabled={!this.canLogin()} variant='raised' color='primary' onTouchTap={this.handleLogin}>
               <Translate>Login</Translate>
             </Button>
           </div>

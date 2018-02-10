@@ -7,12 +7,12 @@ module.exports = function(registrar) {
     config: {
       handler: function (req, resp) {
         const configLanguages = require('../../config/languages')
-        resp({
+        return {
           language: {
             default: 'en',
             dictionary: configLanguages
           }
-        })
+        };
       },
       description: 'Get site config',
       notes: 'Site config',
@@ -29,7 +29,7 @@ module.exports = function(registrar) {
         method: preHandlers.tokenCheck
       }],
       handler: function (req, resp) {
-        resp(req.pre.user)
+        return req.pre.user
       },
       description: 'Get site config',
       notes: 'Site config',

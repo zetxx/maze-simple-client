@@ -11,7 +11,7 @@ const settings = {
 }
 
 module.exports = {
-  watch: (server) => {
+  watch: () => {
     if (config.env === 'development') {
       const Webpack = require('webpack')
       const wpconf = {
@@ -80,15 +80,10 @@ module.exports = {
         reload: true
       }
 
-      server.register({
-        register: require('hapi-webpack-plugin'),
+      return {
+        plugin: require('hapi-webpack-plugin'),
         options: { compiler, assets, hot }
-      }, (error) => {
-        if (error) {
-          return console.error('Hot reload', error)
-        }
-        return console.info('Hot reload ok')
-      })
+      };
     }
   },
   build: () => {

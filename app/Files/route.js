@@ -71,16 +71,15 @@ module.exports = function(registrar) {
     method: 'GET',
     path: '/api/files/image/{fileId}/{width}x{height}',
     config: {
-      handler: function (req, resp) {
-        files.find({where: {id: req.params.fileId}})
+      handler: function (req, h) {
+        return files.find({where: {id: req.params.fileId}})
           .then(fileCreator(req))
           .then((f) => {
-            resp(fs.createReadStream(f.fileName))
-              .type(f.contentType)
+            return h.response(fs.createReadStream(f.fileName)).type(f.contentType)
           })
           .catch((e) => {
             console.error(e)
-            resp(e)
+            throw e
           })
       },
       description: 'Get image',
@@ -100,24 +99,25 @@ module.exports = function(registrar) {
     method: 'GET',
     path: '/api/files/{fileId}',
     config: {
-      handler: function (req, resp) {
-        files.find({where: {id: req.params.fileId}})
+      handler: function (req, h) {
+        return files.find({where: {id: req.params.fileId}})
           .then((r) => {
             if (!r) {
               throw Boom.notFound('missing resource')
             }
             var fileName = path.join(filesDirectory.storeDir, r.itemId.toString(), r.id.toString())
+            const response = h.response(fs.createReadStream(fileName));
             if (r.contentType.indexOf('image') >= 0) {
-              return resp(fs.createReadStream(fileName))
+              return response
                 .type(r.contentType)
             }
-            return resp(fs.createReadStream(fileName))
+            return response
               .type(r.contentType)
               .header('Content-Disposition', `attachment; filename=${r.name}`)
           })
           .catch((e) => {
             console.error(e)
-            resp(e)
+            throw e
           })
       },
       description: 'Get file',

@@ -17,7 +17,7 @@ PriceRuleGroup.belongsToMany(PriceRules, {through: PriceRuleGroupBinding})
 
 module.exports = {
   tokenCheck: (request, reply) => {
-    session
+    return session
       .check(request.params.token)
       .then((r) => {
         return users
@@ -39,10 +39,9 @@ module.exports = {
             return r.toJSON()
           })
       })
-      .then(reply)
       .catch((e) => {
         console.error(e)
-        return reply(Boom.unauthorized('invalid session'))
+        throw Boom.unauthorized('invalid session')
       })
   }
 }

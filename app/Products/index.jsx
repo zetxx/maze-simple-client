@@ -58,11 +58,11 @@ export class Products extends React.Component {
   }
   getExport() {
     if (!this.props.basketSelected) {
-      return (<Button raised href={`/api/products/export/${this.props.token}`} style={{textAlign: 'right'}} color='primary'>
+      return (<Button variant='raised' href={`/api/products/export/${this.props.token}`} style={{textAlign: 'right'}} color='primary'>
         <T>Export</T>
       </Button>)
     }
-    return (<Button raised onClick={this.handlePrepareExportAndDo} style={{textAlign: 'right'}} color='primary'>
+    return (<Button variant='raised' onClick={this.handlePrepareExportAndDo} style={{textAlign: 'right'}} color='primary'>
       <T>Export</T>
     </Button>)
   }
